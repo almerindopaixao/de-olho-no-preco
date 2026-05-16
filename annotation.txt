@@ -1,0 +1,89 @@
+collections
+    products
+        {
+            "id": number
+            "name": string
+            "categories": string[]
+            "brand": string,
+            "gtin_ean": string,
+            "attributes: {"k": string, "v": string}[],
+            "image": string // url,
+            "schemaVersion": number
+            "created_at": string,
+            "updated_at": string            
+        } // indice em attributes.k e attributes.v
+
+    offers
+        {
+            "id": number
+            "product_id": number // Referencia ao produto
+            "source": string // amazon, mercado_livre, shopee
+            "external_id": string
+            "title": string,
+            "affiliate_url": string,
+            "raw": {"seller": string, "tags": string[]} // dados originais e não normalizados,
+            "current_price": float,
+            "available": boolean,
+            "captured_at": string            
+        }
+
+    price_history
+        {
+            "id": number
+            "offer_id": number // Referencia a oferta da loja (product_deal)
+            "source": string // amazon, mercado_livre, shopee
+            "period": string // 2026-05
+            "metrics": {"price": {"avg": float, "max": float, "min": float}},
+            "prices": {"date": string, price: float}[],          
+        }
+================================
+    Como normalizar categorias
+
+    Crie uma taxonomia própria.
+
+    categories
+        {
+            "id": number,
+            "name": string,
+            "slug": string,
+            "parent_id": number, // id de outro documento
+        }
+
+
+    category_mappings
+        {
+            "source": string,
+            "external_category": string,
+            "category_id": number
+        }
+
+================================
+Como resolver matching de produtos
+
+Estratégia híbrida
+1. deterministic matching
+EAN
+UPC
+SKU
+GTIN
+ISBN
+
+2. fuzzy matching
+
+Usando:
+
+embeddings
+cosine similarity
+trigram
+levenshtein
+TF-IDF
+
+3. attribute similarity
+
+Comparar:
+
+marca
+modelo
+RAM
+armazenamento
+
